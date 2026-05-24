@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { Laptop, Settings, BarChart3, ArrowUpRight, Smartphone, Cloud, Cpu } from 'lucide-react';
+import { Laptop, Settings, BarChart3, ArrowUpRight, Smartphone, Cloud, Cpu, Menu, X } from 'lucide-react';
 import Privacy from './Privacy.tsx';
+import ProjectDetail from './ProjectDetail.tsx';
+import { projects, Project } from './data/projects.ts';
+
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'privacy'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'privacy' | 'project'>('home');
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Navigate to sections smoothly, rendering home page first if needed
+  // Navigate to sections smoothly
   const navigateToSection = (sectionId: string) => {
     setCurrentPage('home');
+    setMobileMenuOpen(false);
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -17,7 +23,23 @@ export default function App() {
     }, 50);
   };
 
-  // Dynamic card glow coordinate tracker
+  // Open project detail page
+  const openProject = (project: Project) => {
+    setSelectedProject(project);
+    setCurrentPage('project');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Back from project page
+  const handleProjectBack = () => {
+    setCurrentPage('home');
+    setTimeout(() => {
+      const element = document.getElementById('works');
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  };
+
+  // Dynamic card glow
   const handleMouseMoveCard = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
@@ -27,37 +49,39 @@ export default function App() {
     card.style.setProperty('--mouse-y', `${y}px`);
   };
 
-  // Scroll animations
+  // Scroll progress
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   const noop = () => {};
 
   return (
     <>
-      {/* Moving Background Glow Orbs (Floats globally behind everything) */}
+      {/* Background Glow Orbs */}
       <div className="background-glow-wrapper">
         <div className="glow-orb orb-1"></div>
         <div className="glow-orb orb-2"></div>
         <div className="glow-orb orb-3"></div>
       </div>
 
-      {/* Progress Bar */}
+      {/* Scroll Progress Bar */}
       <motion.div style={{ scaleX, position: 'fixed', top: 0, left: 0, right: 0, height: '4px', background: '#4f46e5', zIndex: 1000, transformOrigin: '0%' }} />
 
-      {/* Navbar (Smaller & Refined) */}
+      {/* Navbar */}
       <nav className="navbar">
-        <div 
-          className="logo" 
+        <div
+          className="logo"
           onClick={() => navigateToSection('home')}
           style={{ cursor: 'pointer' }}
         >
           kódikas<span>.ai</span>
         </div>
+
+        {/* Desktop Nav Links */}
         <div className="nav-links">
           <a href="#home" onClick={(e) => { e.preventDefault(); navigateToSection('home'); }}>Home</a>
           <a href="#services" onClick={(e) => { e.preventDefault(); navigateToSection('services'); }}>Services</a>
@@ -65,18 +89,50 @@ export default function App() {
           <a href="#about" onClick={(e) => { e.preventDefault(); navigateToSection('about'); }}>About</a>
           <a href="#contact" className="btn-primary" onClick={(e) => { e.preventDefault(); navigateToSection('contact'); }}>Get in Touch</a>
         </div>
+
+        {/* Mobile Hamburger Button */}
+        <button
+          className="hamburger-btn"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+          id="hamburger-toggle"
+        >
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </nav>
 
+      {/* Mobile Menu Overlay */}
+      <motion.div
+        className="mobile-menu"
+        initial={false}
+        animate={mobileMenuOpen ? { x: 0, opacity: 1 } : { x: '100%', opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      >
+        <div className="mobile-menu-links">
+          <a href="#home" onClick={(e) => { e.preventDefault(); navigateToSection('home'); }}>Home</a>
+          <a href="#services" onClick={(e) => { e.preventDefault(); navigateToSection('services'); }}>Services</a>
+          <a href="#works" onClick={(e) => { e.preventDefault(); navigateToSection('works'); }}>Works</a>
+          <a href="#about" onClick={(e) => { e.preventDefault(); navigateToSection('about'); }}>About</a>
+          <a href="#contact" className="btn-primary mobile-cta" onClick={(e) => { e.preventDefault(); navigateToSection('contact'); }}>Get in Touch</a>
+        </div>
+      </motion.div>
+
+      {/* Mobile menu backdrop */}
+      {mobileMenuOpen && (
+        <div className="mobile-menu-backdrop" onClick={() => setMobileMenuOpen(false)} />
+      )}
+
+      {/* Pages */}
       {currentPage === 'home' ? (
         <main style={{ position: 'relative', zIndex: 10 }}>
-          {/* Hero Section */}
+          {/* ── Hero ── */}
           <section id="home" className="hero">
             <div className="hero-content">
               <h1 className="hero-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <span className="line-wrapper">
-                  <motion.span 
+                  <motion.span
                     display="inline-block"
-                    initial={{ y: "100%" }}
+                    initial={{ y: '100%' }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     style={{ display: 'inline-block' }}
@@ -85,10 +141,10 @@ export default function App() {
                   </motion.span>
                 </span>
                 <span className="line-wrapper">
-                  <motion.span 
+                  <motion.span
                     className="gradient-text"
                     display="inline-block"
-                    initial={{ y: "100%" }}
+                    initial={{ y: '100%' }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
                     style={{ display: 'inline-block' }}
@@ -111,18 +167,18 @@ export default function App() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.55 }}
               >
-                <motion.a 
-                  href="#services" 
-                  onClick={(e) => { e.preventDefault(); navigateToSection('services'); }} 
+                <motion.a
+                  href="#services"
+                  onClick={(e) => { e.preventDefault(); navigateToSection('services'); }}
                   className="btn-primary cta-btn"
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
                 >
                   Explore Services
                 </motion.a>
-                <motion.a 
-                  href="#contact" 
-                  onClick={(e) => { e.preventDefault(); navigateToSection('contact'); }} 
+                <motion.a
+                  href="#contact"
+                  onClick={(e) => { e.preventDefault(); navigateToSection('contact'); }}
                   className="btn-secondary cta-btn"
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
@@ -133,26 +189,27 @@ export default function App() {
             </div>
           </section>
 
-          {/* Infinite Marquee */}
+          {/* ── Marquee ── */}
           <div className="marquee-container">
             <motion.div
               className="marquee"
               animate={{ x: [0, -1000] }}
-              transition={{ ease: "linear", duration: 15, repeat: Infinity }}
+              transition={{ ease: 'linear', duration: 15, repeat: Infinity }}
             >
               <span>FRONTEND DESIGN • BACKEND ENGINEERING • DATA ANALYSIS • MOBILE APPS • CLOUD & DEVOPS • AI INTEGRATIONS • </span>
               <span>FRONTEND DESIGN • BACKEND ENGINEERING • DATA ANALYSIS • MOBILE APPS • CLOUD & DEVOPS • AI INTEGRATIONS • </span>
             </motion.div>
           </div>
 
-          {/* Services Section with Mouse-tracking Glows */}
+
+          {/* ── Services Section ── */}
           <section id="services" className="services">
             <div className="section-header">
               <motion.h2
                 className="section-title"
                 initial={{ y: 50, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
+                viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6 }}
               >
                 Our Expertise
@@ -161,7 +218,7 @@ export default function App() {
                 className="section-desc"
                 initial={{ y: 30, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
+                viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
                 We build scalable, high-performance solutions tailored to your needs.
@@ -169,106 +226,40 @@ export default function App() {
             </div>
 
             <div className="services-grid">
-              {/* Card 1: Frontend */}
-              <motion.div
-                className="service-card"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6 }}
-                whileHover={{ y: -6 }}
-                onMouseMove={handleMouseMoveCard}
-              >
-                <div className="service-icon"><Laptop size={48} color="#4f46e5" /></div>
-                <h3>Frontend Design</h3>
-                <p>Crafting pixel-perfect, responsive, and highly interactive user interfaces. We specialize in React, Next.js, and modern CSS to build web experiences that captivate users and drive engagement.</p>
-              </motion.div>
-
-              {/* Card 2: Backend */}
-              <motion.div
-                className="service-card"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: 0.05 }}
-                whileHover={{ y: -6 }}
-                onMouseMove={handleMouseMoveCard}
-              >
-                <div className="service-icon"><Settings size={48} color="#4f46e5" /></div>
-                <h3>Backend Systems</h3>
-                <p>Engineering secure, scalable, and ultra-fast server architectures. From microservices and RESTful/GraphQL APIs to database management (SQL/NoSQL), we ensure your system is robust under heavy load.</p>
-              </motion.div>
-
-              {/* Card 3: Data Analysis */}
-              <motion.div
-                className="service-card"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                whileHover={{ y: -6 }}
-                onMouseMove={handleMouseMoveCard}
-              >
-                <div className="service-icon"><BarChart3 size={48} color="#4f46e5" /></div>
-                <h3>Data Analysis</h3>
-                <p>Transforming complex datasets into actionable business intelligence. We build custom data pipelines, interactive dashboards, and statistical models to guide your strategic decisions.</p>
-              </motion.div>
-
-              {/* Card 4: Mobile Apps */}
-              <motion.div
-                className="service-card"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: 0.15 }}
-                whileHover={{ y: -6 }}
-                onMouseMove={handleMouseMoveCard}
-              >
-                <div className="service-icon"><Smartphone size={48} color="#4f46e5" /></div>
-                <h3>Mobile Apps</h3>
-                <p>Building native and cross-platform mobile solutions for iOS and Android. Using React Native and Flutter, we deliver sleek, high-performance apps directly to your users' hands.</p>
-              </motion.div>
-
-              {/* Card 5: Cloud & DevOps */}
-              <motion.div
-                className="service-card"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                whileHover={{ y: -6 }}
-                onMouseMove={handleMouseMoveCard}
-              >
-                <div className="service-icon"><Cloud size={48} color="#4f46e5" /></div>
-                <h3>Cloud & DevOps</h3>
-                <p>Automating deployment pipelines and optimizing infrastructure. We utilize AWS, Docker, and Kubernetes to build secure, auto-scaling environments with 99.9% uptime.</p>
-              </motion.div>
-
-              {/* Card 6: AI & ML */}
-              <motion.div
-                className="service-card"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: 0.25 }}
-                whileHover={{ y: -6 }}
-                onMouseMove={handleMouseMoveCard}
-              >
-                <div className="service-icon"><Cpu size={48} color="#4f46e5" /></div>
-                <h3>AI & Machine Learning</h3>
-                <p>Integrating intelligent capabilities into your software. From natural language processing and computer vision to custom LLM deployments, we bring the power of AI to your business.</p>
-              </motion.div>
+              {[
+                { icon: <Laptop size={48} color="#4f46e5" />, title: 'Frontend Design', desc: 'Crafting pixel-perfect, responsive, and highly interactive user interfaces. We specialize in React, Next.js, and modern CSS to build web experiences that captivate users and drive engagement.' },
+                { icon: <Settings size={48} color="#4f46e5" />, title: 'Backend Systems', desc: 'Engineering secure, scalable, and ultra-fast server architectures. From microservices and RESTful/GraphQL APIs to database management (SQL/NoSQL), we ensure your system is robust under heavy load.' },
+                { icon: <BarChart3 size={48} color="#4f46e5" />, title: 'Data Analysis', desc: 'Transforming complex datasets into actionable business intelligence. We build custom data pipelines, interactive dashboards, and statistical models to guide your strategic decisions.' },
+                { icon: <Smartphone size={48} color="#4f46e5" />, title: 'Mobile Apps', desc: 'Building native and cross-platform mobile solutions for iOS and Android. Using React Native and Flutter, we deliver sleek, high-performance apps directly to your users\' hands.' },
+                { icon: <Cloud size={48} color="#4f46e5" />, title: 'Cloud & DevOps', desc: 'Automating deployment pipelines and optimizing infrastructure. We utilize AWS, Docker, and Kubernetes to build secure, auto-scaling environments with 99.9% uptime.' },
+                { icon: <Cpu size={48} color="#4f46e5" />, title: 'AI & Machine Learning', desc: 'Integrating intelligent capabilities into your software. From natural language processing and computer vision to custom LLM deployments, we bring the power of AI to your business.' },
+              ].map((svc, i) => (
+                <motion.div
+                  key={svc.title}
+                  className="service-card"
+                  initial={{ y: 50, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true, margin: '-100px' }}
+                  transition={{ duration: 0.6, delay: i * 0.05 }}
+                  whileHover={{ y: -6 }}
+                  onMouseMove={handleMouseMoveCard}
+                >
+                  <div className="service-icon">{svc.icon}</div>
+                  <h3>{svc.title}</h3>
+                  <p>{svc.desc}</p>
+                </motion.div>
+              ))}
             </div>
           </section>
 
-          {/* Featured Works Section */}
+          {/* ── Featured Works ── */}
           <section id="works" className="works">
             <div className="section-header">
               <motion.h2
                 className="section-title"
                 initial={{ y: 50, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
+                viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6 }}
               >
                 Selected Projects
@@ -277,143 +268,45 @@ export default function App() {
                 className="section-desc"
                 initial={{ y: 30, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
+                viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
                 A glimpse into the digital solutions we've designed and engineered.
               </motion.p>
             </div>
 
-            <div className="works-grid">
-              {/* Project 1 */}
-              <div className="work-item">
-                <motion.div
-                  className="work-image-container"
-                  initial={{ x: -60, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  whileHover={{ scale: 1.02 }}
+            <div className="project-list">
+              {projects.map((project, index) => (
+                <motion.button
+                  key={project.id}
+                  className="project-list-item"
+                  onClick={() => openProject(project)}
+                  initial={{ y: 30, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  whileHover="hover"
                 >
-                  <motion.div 
-                    className="work-image-placeholder"
-                    whileHover={{ scale: 1.2, rotate: 6 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 15 }}
-                  >
-                    🌌
-                  </motion.div>
-                </motion.div>
-                <motion.div
-                  className="work-info"
-                  initial={{ x: 60, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                >
-                  <div className="work-tags">
-                    <span className="tag">Next.js</span>
-                    <span className="tag">Web3</span>
-                    <span className="tag">UI/UX</span>
+                  <span className="project-list-number">0{index + 1}</span>
+                  <span className="project-list-name">{project.title}</span>
+                  <div className="project-list-tags">
+                    {project.tags.slice(0, 3).map((tag) => (
+                      <span key={tag} className="tag">{tag}</span>
+                    ))}
                   </div>
-                  <h3>Aether Dashboard</h3>
-                  <p>A next-generation SaaS interface designed for data indexing protocols. Built with sub-second latency visualization, real-time WebSockets feeds, and a futuristic dark aesthetic.</p>
-                  <a
-                    href="#contact"
-                    className="btn-text"
-                    onClick={(e) => { e.preventDefault(); navigateToSection('contact'); }}
+                  <motion.span
+                    className="project-list-arrow"
+                    variants={{ hover: { x: 6, rotate: -45 } }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                   >
-                    View Case Study <ArrowUpRight size={16} />
-                  </a>
-                </motion.div>
-              </div>
-
-              {/* Project 2 */}
-              <div className="work-item reverse">
-                <motion.div
-                  className="work-info"
-                  initial={{ x: -60, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                >
-                  <div className="work-tags">
-                    <span className="tag">React Native</span>
-                    <span className="tag">iOS & Android</span>
-                    <span className="tag">AI</span>
-                  </div>
-                  <h3>Helius AI Core</h3>
-                  <p>A mobile companion app managing smart home automation with local AI. We developed custom Bluetooth mesh integration, localized NLP command parsing, and widget actions.</p>
-                  <a
-                    href="#contact"
-                    className="btn-text"
-                    onClick={(e) => { e.preventDefault(); navigateToSection('contact'); }}
-                  >
-                    View Case Study <ArrowUpRight size={16} />
-                  </a>
-                </motion.div>
-                <motion.div
-                  className="work-image-container"
-                  initial={{ x: 60, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <motion.div 
-                    className="work-image-placeholder"
-                    whileHover={{ scale: 1.2, rotate: -6 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 15 }}
-                  >
-                    🌀
-                  </motion.div>
-                </motion.div>
-              </div>
-
-              {/* Project 3 */}
-              <div className="work-item">
-                <motion.div
-                  className="work-image-container"
-                  initial={{ x: -60, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <motion.div 
-                    className="work-image-placeholder"
-                    whileHover={{ scale: 1.2, rotate: 6 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 15 }}
-                  >
-                    ✨
-                  </motion.div>
-                </motion.div>
-                <motion.div
-                  className="work-info"
-                  initial={{ x: 60, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                >
-                  <div className="work-tags">
-                    <span className="tag">Python</span>
-                    <span className="tag">Kubernetes</span>
-                    <span className="tag">LLM</span>
-                  </div>
-                  <h3>Synthetix Compiler</h3>
-                  <p>An intelligent agentic compiler converting natural language instructions to production-ready microservices. Engineered complex orchestration architectures using Kubernetes.</p>
-                  <a
-                    href="#contact"
-                    className="btn-text"
-                    onClick={(e) => { e.preventDefault(); navigateToSection('contact'); }}
-                  >
-                    View Case Study <ArrowUpRight size={16} />
-                  </a>
-                </motion.div>
-              </div>
+                    <ArrowUpRight size={22} />
+                  </motion.span>
+                </motion.button>
+              ))}
             </div>
           </section>
 
-          {/* About Section */}
+          {/* ── About ── */}
           <section id="about" className="about">
             <div className="about-content">
               <motion.p
@@ -428,14 +321,14 @@ export default function App() {
             </div>
           </section>
 
-          {/* Contact Section */}
+          {/* ── Contact ── */}
           <section id="contact" className="contact">
             <motion.div
               className="contact-box"
               initial={{ scale: 0.9, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ type: "spring", stiffness: 100, damping: 15 }}
+              transition={{ type: 'spring', stiffness: 100, damping: 15 }}
             >
               <h2>Ready to Start?</h2>
               <p>Let's build something extraordinary together.</p>
@@ -451,27 +344,33 @@ export default function App() {
             </motion.div>
           </section>
         </main>
+
+      ) : currentPage === 'project' && selectedProject ? (
+        <main style={{ position: 'relative', zIndex: 10 }}>
+          <ProjectDetail project={selectedProject} onBack={handleProjectBack} />
+        </main>
+
       ) : (
-        <Privacy 
-          setCurrentPage={setCurrentPage} 
-          handleMouseEnter={noop} 
-          handleMouseLeave={noop} 
+        <Privacy
+          setCurrentPage={setCurrentPage}
+          handleMouseEnter={noop}
+          handleMouseLeave={noop}
         />
       )}
 
       <footer>
         <div className="footer-content">
-          <div 
-            className="logo" 
-            onClick={() => navigateToSection('home')} 
+          <div
+            className="logo"
+            onClick={() => navigateToSection('home')}
             style={{ cursor: 'pointer' }}
           >
             kódikas<span>.ai</span>
           </div>
-          <p>&copy; 2026 kódikas.ai. All Rights Reserved.</p>
+          <p>© 2026 kódikas.ai. All Rights Reserved.</p>
           <div className="footer-links">
-            <a 
-              href="#privacy" 
+            <a
+              href="#privacy"
               onClick={(e) => { e.preventDefault(); setCurrentPage('privacy'); }}
             >
               Privacy Policy
