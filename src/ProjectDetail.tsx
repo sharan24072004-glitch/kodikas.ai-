@@ -202,7 +202,7 @@ export default function ProjectDetail({ project, onBack }: ProjectDetailProps) {
         >
           <p>Interested in a similar solution?</p>
           <motion.a
-            href="mailto:hello@kodikas.ai"
+            href="mailto:hello@codigus.ai"
             className="btn-primary"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '1.05rem', padding: '0.9rem 2rem' }}
             whileHover={{ scale: 1.04 }}

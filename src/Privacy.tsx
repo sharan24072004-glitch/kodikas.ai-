@@ -73,7 +73,7 @@ export default function Privacy({ setCurrentPage, handleMouseEnter, handleMouseL
         >
           <section>
             <h2 style={{ color: '#fff', marginBottom: '1rem', fontFamily: 'Space Grotesk' }}>1. Information We Collect</h2>
-            <p>At kódikas.ai, we value your privacy. We collect minimal information required to contact you or improve our web experience. This may include personal data such as your name and email address when you voluntarily submit them through our contact links, as well as anonymous usage metrics collected via browser cookies.</p>
+            <p>At códigus.ai, we value your privacy. We collect minimal information required to contact you or improve our web experience. This may include personal data such as your name and email address when you voluntarily submit them through our contact links, as well as anonymous usage metrics collected via browser cookies.</p>
           </section>
 
           <section>
@@ -93,7 +93,7 @@ export default function Privacy({ setCurrentPage, handleMouseEnter, handleMouseL
 
           <section>
             <h2 style={{ color: '#fff', marginBottom: '1rem', fontFamily: 'Space Grotesk' }}>5. Contact Us</h2>
-            <p>If you have any questions regarding this Privacy Policy or our data practices, feel free to reach out to us at <a href="mailto:hello@kodikas.ai" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>hello@kodikas.ai</a>.</p>
+            <p>If you have any questions regarding this Privacy Policy or our data practices, feel free to reach out to us at <a href="mailto:hello@codigus.ai" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>hello@codigus.ai</a>.</p>
           </section>
         </motion.div>
       </div>

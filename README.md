@@ -1,6 +1,6 @@
-# kódikas.ai — Premium Software Engineering Portfolio
+# códigus.ai — Premium Software Engineering Portfolio
 
-A sleek, dark-mode portfolio website for **kódikas.ai**, a premium software engineering and digital transformation agency. Built with React, TypeScript, Framer Motion, and Vite.
+A sleek, dark-mode portfolio website for **códigus.ai**, a premium software engineering and digital transformation agency. Operating as the specialized technology arm of **[SN Groups](https://sngroups.co.in)**. Built with React, TypeScript, Framer Motion, and Vite.
 
 ---
 
@@ -34,7 +34,7 @@ A sleek, dark-mode portfolio website for **kódikas.ai**, a premium software eng
 ## 📁 Project Structure
 
 ```
-kodikas.ai/
+codigus.ai/
 ├── public/
 │   └── projects/          # Project mockup images
 │       ├── aether.png
@@ -117,8 +117,8 @@ To add a new project:
 
 ## 📬 Contact
 
-**hello@kodikas.ai**
+**hello@codigus.ai**
 
 ---
 
-> Built with precision by kódikas.ai
+> Built with precision by códigus.ai

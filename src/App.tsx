@@ -78,7 +78,7 @@ export default function App() {
           onClick={() => navigateToSection('home')}
           style={{ cursor: 'pointer' }}
         >
-          kódikas<span>.ai</span>
+          códigus<span>.ai</span>
         </div>
 
         {/* Desktop Nav Links */}
@@ -316,7 +316,7 @@ export default function App() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                At <span className="highlight" style={{ color: '#fff' }}>kódikas.ai</span>, we don't just write code; we architect digital experiences. Inspired by the best in the industry, our mission is to elevate your brand through cutting-edge technology and unparalleled design aesthetics.
+                Established in June 2022 and operating as a specialized technology division of <a href="https://sngroups.co.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'underline', textUnderlineOffset: '8px', textDecorationColor: 'rgba(255,255,255,0.2)', transition: 'all 0.3s ease' }} onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent-color)'; e.currentTarget.style.textDecorationColor = 'var(--accent-color)'; }} onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.textDecorationColor = 'rgba(255,255,255,0.2)'; }}>SN Groups</a>, <span className="highlight" style={{ color: '#fff' }}>códigus.ai</span> has been at the forefront of digital innovation, delivering premium, end-to-end IT solutions. We don't just write code; we architect seamless digital experiences. Driven by a relentless pursuit of engineering excellence and sophisticated design, our mission is to elevate your brand through state-of-the-art technology and unparalleled aesthetics.
               </motion.p>
             </div>
           </section>
@@ -333,13 +333,13 @@ export default function App() {
               <h2>Ready to Start?</h2>
               <p>Let's build something extraordinary together.</p>
               <motion.a
-                href="mailto:hello@kodikas.ai"
+                href="mailto:hello@codigus.ai"
                 className="btn-primary huge-btn"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
               >
-                hello@kodikas.ai <ArrowUpRight />
+                hello@codigus.ai <ArrowUpRight />
               </motion.a>
             </motion.div>
           </section>
@@ -365,9 +365,9 @@ export default function App() {
             onClick={() => navigateToSection('home')}
             style={{ cursor: 'pointer' }}
           >
-            kódikas<span>.ai</span>
+            códigus<span>.ai</span>
           </div>
-          <p>© 2026 kódikas.ai. All Rights Reserved.</p>
+          <p>© 2022–2026 códigus.ai. All Rights Reserved.</p>
           <div className="footer-links">
             <a
               href="#privacy"
