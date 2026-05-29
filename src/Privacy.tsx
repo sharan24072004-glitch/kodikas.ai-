@@ -93,7 +93,7 @@ export default function Privacy({ setCurrentPage, handleMouseEnter, handleMouseL
 
           <section>
             <h2 style={{ color: '#fff', marginBottom: '1rem', fontFamily: 'Space Grotesk' }}>5. Contact Us</h2>
-            <p>If you have any questions regarding this Privacy Policy or our data practices, feel free to reach out to us at <a href="mailto:hello@codigus.ai" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>hello@codigus.ai</a>.</p>
+            <p>If you have any questions regarding this Privacy Policy or our data practices, feel free to reach out to us at <a href="mailto:codigus-ai@sngroups.co.in" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>codigus-ai@sngroups.co.in</a>.</p>
           </section>
         </motion.div>
       </div>

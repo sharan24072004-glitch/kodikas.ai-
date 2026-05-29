@@ -117,7 +117,7 @@ To add a new project:
 
 ## 📬 Contact
 
-**hello@codigus.ai**
+**codigus-ai@sngroups.co.in**
 
 ---
 

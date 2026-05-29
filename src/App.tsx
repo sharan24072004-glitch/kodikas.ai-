@@ -331,13 +331,13 @@ export default function App() {
               <h2>Ready to Start?</h2>
               <p>Let's build something extraordinary together.</p>
               <motion.a
-                href="mailto:hello@codigus.ai"
+                href="mailto:codigus-ai@sngroups.co.in"
                 className="btn-primary huge-btn"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
               >
-                hello@codigus.ai <ArrowUpRight />
+                codigus-ai@sngroups.co.in <ArrowUpRight />
               </motion.a>
             </motion.div>
           </section>
