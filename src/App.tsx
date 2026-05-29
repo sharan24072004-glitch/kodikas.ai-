@@ -57,7 +57,7 @@ export default function App() {
     restDelta: 0.001,
   });
 
-  const noop = () => {};
+  const noop = () => { };
 
   return (
     <>
@@ -131,7 +131,6 @@ export default function App() {
               <h1 className="hero-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <span className="line-wrapper">
                   <motion.span
-                    display="inline-block"
                     initial={{ y: '100%' }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -143,10 +142,9 @@ export default function App() {
                 <span className="line-wrapper">
                   <motion.span
                     className="gradient-text"
-                    display="inline-block"
                     initial={{ y: '100%' }}
                     animate={{ y: 0 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     style={{ display: 'inline-block' }}
                   >
                     Digital Future
